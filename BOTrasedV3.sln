@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BOTrasedV3", "BOTrasedV3\BOTrasedV3.csproj", "{CC4B41D9-D531-4F1B-9BAD-B27E32045B5A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC4B41D9-D531-4F1B-9BAD-B27E32045B5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC4B41D9-D531-4F1B-9BAD-B27E32045B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC4B41D9-D531-4F1B-9BAD-B27E32045B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC4B41D9-D531-4F1B-9BAD-B27E32045B5A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {023454D1-EEAE-43B6-A204-EDC1C2475449}
+	EndGlobalSection
+EndGlobal
