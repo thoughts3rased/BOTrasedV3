@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
+    <File Path="README.md" />
   </Folder>
   <Project Path="BOTrasedV3\BOTrasedV3.csproj" />
   <Properties Name="Visual Studio">

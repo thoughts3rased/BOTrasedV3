@@ -1,4 +1,6 @@
-﻿using BOTrasedV3.Models;
+﻿using BOTrasedV3.DAO;
+using BOTrasedV3.Interfaces;
+using BOTrasedV3.Models;
 using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
@@ -32,21 +34,16 @@ namespace BOTrasedV3
                         GatewayIntents = GatewayIntents.AllUnprivileged,
                         LogLevel = LogSeverity.Verbose
                     }));
-
-                    // NEW: Register InteractionService
                     services.AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>(), new InteractionServiceConfig()
                     {
                         LogLevel = LogSeverity.Verbose,
-                        DefaultRunMode = RunMode.Async // Essential for async operations
+                        DefaultRunMode = RunMode.Async
                     }));
 
-                    // Register your Discord Bot as a Hosted Service
                     services.AddHostedService<DiscordBotWorker>();
 
-                    // (Optional) Register other services your slash command handlers might need
-                    // These will be automatically injected into your command modules
-                    // services.AddSingleton<IDataService, DataService>();
-                    // services.AddTransient<IMyUtility, MyUtility>();
+                    services.AddSingleton<IDatabaseService, DatabaseService>();
+                    
                 })
                 .ConfigureLogging(logging =>
                 {

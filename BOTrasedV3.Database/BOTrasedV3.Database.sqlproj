@@ -63,6 +63,7 @@
     <Build Include="UserInventories.sql" />
     <Build Include="Items.sql" />
     <Build Include="CommandUsageCounts.sql" />
+    <Build Include="LogCommandUsage.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="BOTrasedV3.Database.refactorlog" />

@@ -1,19 +1,16 @@
-﻿using BOTrasedV3.Models;
+﻿using BOTrasedV3.Interfaces;
+using BOTrasedV3.Models;
+using Microsoft.Data.SqlClient; // <--- Changed from MySql.Data.MySqlClient
 using Microsoft.Extensions.Options;
-using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BOTrasedV3.DAO
 {
-    public class DatabaseService
+    public class DatabaseService : IDatabaseService
     {
         private readonly Configuration _config;
+
         public DatabaseService(IOptions<Configuration> config)
         {
             _config = config.Value;
@@ -24,13 +21,24 @@ namespace BOTrasedV3.DAO
         /// </summary>
         /// <typeparam name="T">The type to deserialise the JSON to</typeparam>
         /// <param name="command">The name of the stored procedure to execute</param>
-        /// <param name="parameters">The parameters to pass to the stored procedure</param>
-        /// <returns></returns>
-        public T ExecuteSprocJson<T>(string command, MySqlParameter[] parameters)
+        /// <returns>A deserialised <typeparamref name="T"/> from the result of the stored proc</returns>
+        public async Task<T> ExecuteSprocJson<T>(string command)
         {
-            using (MySqlConnection connection = GetConnection())
+            return await ExecuteSprocJson<T>(command, []);
+        }
+
+        /// <summary>
+        /// Executes a stored procedure that returns JSON and serialises it to <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T">The type to deserialise the JSON to</typeparam>
+        /// <param name="command">The name of the stored procedure to execute</param>
+        /// <param name="parameters">The parameters to pass to the stored procedure</param>
+        /// <returns>A deserialised <typeparamref name="T"/> from the result of the stored proc</returns>
+        public async Task<T> ExecuteSprocJson<T>(string command, SqlParameter[] parameters)
+        {
+            using (SqlConnection connection = await GetConnection())
             {
-                MySqlCommand cmd = new MySqlCommand(command, connection);
+                SqlCommand cmd = new SqlCommand(command, connection);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 if (parameters != null)
@@ -38,7 +46,8 @@ namespace BOTrasedV3.DAO
                     cmd.Parameters.AddRange(parameters);
                 }
 
-                using (MySqlDataReader reader = cmd.ExecuteReader())
+                // Consider making this method async and using ExecuteReaderAsync for better performance
+                using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
                 {
                     if (reader.Read())
                     {
@@ -57,80 +66,60 @@ namespace BOTrasedV3.DAO
         /// Executes a non-returning stored procedure
         /// </summary>
         /// <param name="command">The stored procedure to update</param>
-        /// <param name="parameters">The parameters to pass to the stored procedure</param>
-        public void ExecuteNonQuery(string command, MySqlParameter[] parameters)
+        public async Task ExecuteNonQuery(string command)
         {
-            using (MySqlConnection connection = GetConnection())
+            await ExecuteNonQuery(command, []);
+        }
+
+        /// <summary>
+        /// Executes a non-returning stored procedure
+        /// </summary>
+        /// <param name="command">The stored procedure to update</param>
+        /// <param name="parameters">The parameters to pass to the stored procedure</param>
+        public async Task ExecuteNonQuery(string command, SqlParameter[] parameters)
+        {
+            using (SqlConnection connection = await GetConnection())
             {
-                MySqlCommand cmd = new MySqlCommand(command, connection);
-                cmd.CommandType= CommandType.StoredProcedure;
+                SqlCommand cmd = new SqlCommand(command, connection);
+                cmd.CommandType = CommandType.StoredProcedure;
 
                 if (parameters != null)
                 {
                     cmd.Parameters.AddRange(parameters);
                 }
 
-                cmd.ExecuteNonQuery();
+                // Consider making this method async and using ExecuteNonQueryAsync for better performance
+                await cmd.ExecuteNonQueryAsync();
             }
         }
 
         /// <summary>
-        /// Gets an open MySQL connection.
+        /// Gets an open MSSQL connection.
         /// </summary>
-        /// <returns>An open MySqlConnection object.</returns>
+        /// <returns>An open SqlConnection object.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the connection string is not set or if the connection cannot be opened.</exception>
-        public MySqlConnection GetConnection()
+        public async Task<SqlConnection> GetConnection()
         {
             if (string.IsNullOrWhiteSpace(_config.ConnectionString))
             {
                 throw new InvalidOperationException("Connection string is not set. Please ensure it's configured correctly.");
             }
 
-            MySqlConnection connection = new MySqlConnection(_config.ConnectionString);
+            SqlConnection connection = new SqlConnection(_config.ConnectionString);
+
             try
             {
                 if (connection.State != ConnectionState.Open)
                 {
-                    connection.Open();
-                    Console.WriteLine("MySQL Connection opened successfully.");
+                    await connection.OpenAsync();
+                    Console.WriteLine("MSSQL Connection opened successfully.");
                 }
                 return connection;
             }
-            catch (MySqlException ex)
+            catch (SqlException ex)
             {
-                Console.Error.WriteLine($"Error opening MySQL connection: {ex.Message}");
+                Console.Error.WriteLine($"Error opening MSSQL connection: {ex.Message}");
                 throw new InvalidOperationException("Could not open database connection.", ex);
-            }
-        }
-
-        /// <summary>
-        /// Closes a MySQL connection if it is open.
-        /// </summary>
-        /// <param name="connection">The MySqlConnection object to close.</param>
-        public void CloseConnection(MySqlConnection connection)
-        {
-            if (connection == null)
-            {
-                Console.WriteLine("Attempted to close a null connection.");
-                return;
-            }
-
-            try
-            {
-                if (connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                    Console.WriteLine("MySQL Connection closed successfully.");
-                }
-            }
-            catch (MySqlException ex)
-            {
-                Console.Error.WriteLine($"Error closing MySQL connection: {ex.Message}");
-            }
-            finally
-            {
-                // Dispose of the connection to release resources.
-                connection.Dispose();
             }
         }
     }
