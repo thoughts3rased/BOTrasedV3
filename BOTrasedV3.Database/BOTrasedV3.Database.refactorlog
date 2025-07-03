@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="913c546b-85cd-4515-922a-df4daea101a5" ChangeDateTime="07/03/2025 20:50:11">
+    <Property Name="ElementName" Value="[dbo].[UserInventories].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[UserInventories]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UserId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="064f555f-5507-4705-bd5f-58d16bc1149f" ChangeDateTime="07/03/2025 21:02:48">
+    <Property Name="ElementName" Value="[dbo].[Items].[description]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Items]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Description" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ceafb58e-45d7-4bf3-adbe-e2a2367d843d" ChangeDateTime="07/03/2025 21:09:54">
+    <Property Name="ElementName" Value="[dbo].[FK_UserInventories_ToTable]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[UserInventories]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_UserInventories_Users]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9a151eb7-f239-4047-a391-6545a1c20e8b" ChangeDateTime="07/03/2025 21:11:19">
+    <Property Name="ElementName" Value="[dbo].[CommandUsageCounts].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[CommandUsageCounts]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Name" />
+  </Operation>
+</Operations>
