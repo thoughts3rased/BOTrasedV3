@@ -19,7 +19,7 @@ namespace BOTrasedV3.Services
         /// Records a usage of a command in the database
         /// </summary>
         /// <param name="commandName">the name of the command that was used</param>
-        public async void LogCommandUsage(string commandName)
+        public async Task LogCommandUsage(string commandName)
         {
             SqlParameter[] parameters =
             [

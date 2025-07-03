@@ -1,14 +1,11 @@
-﻿using BOTrasedV3.Models;
+﻿using BOTrasedV3.Interfaces;
+using BOTrasedV3.Models;
 using Discord;
-using Discord.Commands;
 using Discord.Interactions;
 using Discord.WebSocket;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualBasic;
-using System.Buffers.Text;
-using System;
 using System.Reflection;
 
 namespace BOTrasedV3
@@ -21,6 +18,7 @@ namespace BOTrasedV3
         private readonly Configuration _discordSettings;
         private readonly IServiceProvider _serviceProvider; // Required for CommandService context
         private readonly IHostEnvironment _env;
+        private readonly ICommandStatisticsService _commandStatisticsService;
 
         public DiscordBotWorker(
             DiscordSocketClient client,
@@ -28,7 +26,8 @@ namespace BOTrasedV3
             ILogger<DiscordBotWorker> logger,
             IOptions<Configuration> discordSettings,
             IServiceProvider serviceProvider,
-            IHostEnvironment env) // Inject IServiceProvider for CommandService
+            IHostEnvironment env,
+            ICommandStatisticsService commandStatisticsService) // Inject IServiceProvider for CommandService
         {
             _client = client;
             _interactions = interactions;
@@ -40,7 +39,14 @@ namespace BOTrasedV3
             _interactions.Log += LogAsync;
             _client.Ready += OnReadyAsync;
             _client.InteractionCreated += HandleInteraction;
+            _commandStatisticsService = commandStatisticsService;
             _env = env;
+
+            _interactions.InteractionExecuted += async (ICommandInfo commandInfo, IInteractionContext context, IResult result) =>
+            {
+                await _commandStatisticsService.LogCommandUsage(commandInfo.Name);
+            };
+
         }
 
         private Task LogAsync(LogMessage log)

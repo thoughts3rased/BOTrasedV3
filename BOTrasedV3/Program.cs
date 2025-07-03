@@ -1,6 +1,7 @@
 ﻿using BOTrasedV3.DAO;
 using BOTrasedV3.Interfaces;
 using BOTrasedV3.Models;
+using BOTrasedV3.Services;
 using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
@@ -43,6 +44,7 @@ namespace BOTrasedV3
                     services.AddHostedService<DiscordBotWorker>();
 
                     services.AddSingleton<IDatabaseService, DatabaseService>();
+                    services.AddSingleton<ICommandStatisticsService, CommandStatisticsService>();
                     
                 })
                 .ConfigureLogging(logging =>

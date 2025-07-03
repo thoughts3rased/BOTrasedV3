@@ -2,6 +2,6 @@
 {
     public interface ICommandStatisticsService
     {
-        void LogCommandUsage(string commandName);
+        Task LogCommandUsage(string commandName);
     }
 }

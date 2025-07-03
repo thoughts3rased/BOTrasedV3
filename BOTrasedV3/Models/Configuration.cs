@@ -12,6 +12,6 @@ namespace BOTrasedV3.Models
 
         public ulong? TestGuildId { get; set; }
 
-        public string ConnectionString { get; set; } = string.Empty;
+        public string DbConnectionString { get; set; } = string.Empty;
     }
 }

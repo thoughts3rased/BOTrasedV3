@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[LogCommandUsage]
-	@commandName VARCHAR
+	@commandName VARCHAR(255)
 AS
 	MERGE INTO CommandUsageCounts AS Target
     USING (SELECT @commandName AS CommandName) AS Source

@@ -100,12 +100,12 @@ namespace BOTrasedV3.DAO
         /// <exception cref="InvalidOperationException">Thrown if the connection string is not set or if the connection cannot be opened.</exception>
         public async Task<SqlConnection> GetConnection()
         {
-            if (string.IsNullOrWhiteSpace(_config.ConnectionString))
+            if (string.IsNullOrWhiteSpace(_config.DbConnectionString))
             {
                 throw new InvalidOperationException("Connection string is not set. Please ensure it's configured correctly.");
             }
 
-            SqlConnection connection = new SqlConnection(_config.ConnectionString);
+            SqlConnection connection = new SqlConnection(_config.DbConnectionString);
 
             try
             {
