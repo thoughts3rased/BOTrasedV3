@@ -3,7 +3,10 @@ using Microsoft.Data.SqlClient;
 
 namespace BOTrasedV3.Services
 {
-    public class CommandStatisticsService
+    /// <summary>
+    /// Utility class responsible for performing actions related to the logging of command statistics 
+    /// </summary>
+    public class CommandStatisticsService : ICommandStatisticsService
     {
         private readonly IDatabaseService _databaseService;
 
