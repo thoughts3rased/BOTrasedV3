@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# 17
+# Visual Studio Version 17
 VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BOTrasedV3", "BOTrasedV3\BOTrasedV3.csproj", "{CC4B41D9-D531-4F1B-9BAD-B27E32045B5A}"
@@ -11,6 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "BOTrasedV3.Database", "BOTrasedV3.Database\BOTrasedV3.Database.sqlproj", "{041008BB-E010-412D-A308-50CFDB4B003F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{9C6578E7-E4FE-79BB-1635-F363CC1E80DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{E7A3C856-6834-D657-F2F0-05592DF2DDE9}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\buildaction.yml = .github\workflows\buildaction.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +38,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E7A3C856-6834-D657-F2F0-05592DF2DDE9} = {9C6578E7-E4FE-79BB-1635-F363CC1E80DD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {023454D1-EEAE-43B6-A204-EDC1C2475449}

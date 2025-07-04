@@ -1,0 +1,8 @@
+{
+  "solution": {
+    "path": "BOTrasedV3.sln",
+    "projects": [
+      "BOTrasedV3\\BOTrasedV3.csproj"
+    ]
+  }
+}
