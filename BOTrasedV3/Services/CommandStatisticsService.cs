@@ -1,4 +1,5 @@
-﻿using BOTrasedV3.Interfaces;
+﻿using BOTrasedV3.Constants;
+using BOTrasedV3.Interfaces;
 using Microsoft.Data.SqlClient;
 
 namespace BOTrasedV3.Services
@@ -26,7 +27,7 @@ namespace BOTrasedV3.Services
                 new SqlParameter("commandName", commandName)
             ];
 
-            await _databaseService.ExecuteNonQuery("LogCommandUsage", parameters);
+            await _databaseService.ExecuteNonQuery(StoredProcedureNames.LogCommandUsage, parameters);
         }
     }
 }
