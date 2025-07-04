@@ -13,5 +13,6 @@ namespace BOTrasedV3.Constants
     {
         public const string LogCommandUsage = "LogCommandUsage";
         public const string GetRandomFakeSecret = "GetRandomFakeSecret";
+        public const string GetRandomStatus = "GetRandomStatus";
     }
 }

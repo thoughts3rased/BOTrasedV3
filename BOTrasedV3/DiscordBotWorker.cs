@@ -19,6 +19,8 @@ namespace BOTrasedV3
         private readonly IServiceProvider _serviceProvider; // Required for CommandService context
         private readonly IHostEnvironment _env;
         private readonly ICommandStatisticsService _commandStatisticsService;
+        private readonly IBotStatusService _botStatusService;
+        private Timer _statusTimer;
 
         public DiscordBotWorker(
             DiscordSocketClient client,
@@ -27,7 +29,8 @@ namespace BOTrasedV3
             IOptions<Configuration> discordSettings,
             IServiceProvider serviceProvider,
             IHostEnvironment env,
-            ICommandStatisticsService commandStatisticsService) // Inject IServiceProvider for CommandService
+            ICommandStatisticsService commandStatisticsService, 
+            IBotStatusService botStatusService) // Inject IServiceProvider for CommandService
         {
             _client = client;
             _interactions = interactions;
@@ -39,6 +42,7 @@ namespace BOTrasedV3
             _interactions.Log += LogAsync;
             _client.Ready += OnReadyAsync;
             _client.InteractionCreated += HandleInteraction;
+            _client.MessageReceived += OnMessageReceivedAsync;
             _commandStatisticsService = commandStatisticsService;
             _env = env;
 
@@ -46,7 +50,8 @@ namespace BOTrasedV3
             {
                 await _commandStatisticsService.LogCommandUsage(commandInfo.Name);
             };
-
+            
+            _botStatusService = botStatusService;
         }
 
         private Task LogAsync(LogMessage log)
@@ -68,7 +73,7 @@ namespace BOTrasedV3
         private async Task OnReadyAsync()
         {
             _logger.LogInformation($"Bot is connected as {_client.CurrentUser.Username}#{_client.CurrentUser.Discriminator}");
-            await _client.SetActivityAsync(new Game("with DI", ActivityType.Playing));
+            StartStatusCycle();
 
             // Register command modules
             await _interactions.AddModulesAsync(Assembly.GetEntryAssembly(), _serviceProvider);
@@ -156,6 +161,37 @@ namespace BOTrasedV3
             await _client.StopAsync();
             await _client.LogoutAsync();
             _logger.LogInformation("Discord Bot Service stopped.");
+        }
+
+        private async Task OnMessageReceivedAsync(SocketMessage message)
+        {
+            if (!message.Author.IsBot && message.Channel is SocketTextChannel)
+            {
+
+            }
+        }
+
+        private void StartStatusCycle()
+        {
+            // Set up a timer to update the status every 30 seconds
+            _statusTimer = new Timer(async _ => await UpdateStatusAsync(), null, TimeSpan.Zero, TimeSpan.FromSeconds(30));
+        }
+
+        private async Task UpdateStatusAsync()
+        {
+            // Get the next status in the list
+            var newStatus = await _botStatusService.GetRandomStatus();
+
+            if (newStatus == null)
+            {
+                _logger.LogWarning("No status found to update.");
+            }
+            else
+            {
+                // Update the bot's status
+                await _client.SetActivityAsync(new Game(newStatus.StatusText, newStatus.ActivityType));
+                _logger.LogInformation("Updated bot status to: {Status}", newStatus);
+            }
         }
     }
 }

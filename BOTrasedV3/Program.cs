@@ -45,7 +45,9 @@ namespace BOTrasedV3
 
                     services.AddSingleton<IDatabaseService, DatabaseService>();
                     services.AddSingleton<ICommandStatisticsService, CommandStatisticsService>();
-                    
+                    services.AddSingleton<IFunCommandDataService, FunCommandDataService>();
+                    services.AddSingleton<IBotStatusService, BotStatusService>();
+
                 })
                 .ConfigureLogging(logging =>
                 {
