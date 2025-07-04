@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[FakeSecrets]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Content] VARCHAR(255) NOT NULL
+)
