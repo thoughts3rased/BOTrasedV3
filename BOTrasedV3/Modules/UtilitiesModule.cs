@@ -11,7 +11,7 @@ namespace BOTrasedV3.Modules
         {
             user ??= Context.Interaction.User;
 
-            bool targetIsInvoker = user.Id == Context.Interaction.Id;
+            bool targetIsInvoker = user.Id == Context.Interaction.User.Id;
 
             if (targetIsInvoker)
             {
