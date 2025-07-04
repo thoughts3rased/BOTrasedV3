@@ -1,0 +1,94 @@
+name: Validate SSDT Project
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-ssdt:
+    # Use your self-hosted runner. Ensure it's configured for Linux (e.g., Ubuntu).
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x' # Or the .NET SDK version your project requires
+
+      - name: Build SSDT Project (Basic Validation)
+        # This step compiles the .sqlproj into a .dacpac and catches syntax errors,
+        # unresolved references within the project, etc.
+        # Replace 'YourSolution.sln' with your solution file or 'PathToYourSSDTProject/YourSSDTProject.sqlproj'
+        # If building the whole solution, ensure the SSDT project is included in the .sln
+        # or use a solution filter (.slnf) if you want to exclude other projects.
+        run: |
+          echo "Attempting to build SSDT project..."
+          # Option A: Build the specific SSDT project
+          dotnet build BOTrasedV3.Database/BOTrasedV3.Database.sqlproj --configuration Release
+
+          # Option B: Build the entire solution (if the SSDT project is part of it)
+          # dotnet build YourSolution.sln --configuration Release
+
+          # Option C: Build using a solution filter (recommended if you excluded SSDT from main build)
+          # dotnet build YourSolution.build.slnf --configuration Release
+
+          echo "SSDT Project built successfully, .dacpac created."
+
+      - name: Install SqlPackage CLI Tool
+        # SqlPackage is essential for deeper database validation actions.
+        run: dotnet tool install -g Microsoft.SqlPackage
+
+      - name: Start SQL Server Container for Validation
+        # Spin up a temporary SQL Server instance. This is critical for
+        # SqlPackage to validate against a live schema, even if it's empty.
+        # Adjust SA_PASSWORD for your needs (use GitHub Secrets for production!)
+        run: |
+          echo "Starting SQL Server container..."
+          docker run --name sql_server_validation -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=YourStrongPassword123!" -p 1433:1433 -d [mcr.microsoft.com/mssql/server:2022-latest](https://mcr.microsoft.com/mssql/server:2022-latest)
+          echo "Waiting for SQL Server to start..."
+          # Wait for SQL Server to be ready (adjust sleep time if needed)
+          sleep 30 # Give SQL Server time to initialize
+          echo "SQL Server container started."
+
+      - name: Run SqlPackage Validation
+        # This step performs a more comprehensive validation of the .dacpac
+        # against the running SQL Server instance. It checks for:
+        # - Objects that would be dropped/modified
+        # - Potential data loss
+        # - Compatibility issues
+        # - Unresolved references against the target database (even if empty)
+        # Replace 'PathToYourSSDTProject/bin/Release/YourSSDTProject.dacpac' with the actual path to your DACPAC.
+        # Use the SA_PASSWORD set for the container.
+        run: |
+          echo "Running SqlPackage validation..."
+          sqlpackage.exe /Action:Validate \
+                         /SourceFile:BOTrasedV3.Database/bin/Release/YourSSDTProject.dacpac \
+                         /TargetServerName:localhost \
+                         /TargetDatabaseName:ValidationDB \
+                         /TargetUser:sa \
+                         /TargetPassword:YourStrongPassword123! \
+                         /p:BlockOnPossibleDataLoss=True \
+                         /p:DropObjectsNotInSource=False \
+                         /p:IncludeCompositeObjects=True \
+                         /p:IgnoreNotForReplication=True \
+                         /p:IgnoreColumnOrder=True \
+                         /p:IgnoreWithNocheckOnCheckConstraints=True \
+                         /p:IgnoreWithNocheckOnForeignKeys=True
+
+          echo "SSDT Project validation completed successfully."
+
+      - name: Stop and Remove SQL Server Container
+        # Clean up the temporary container
+        if: always() # Ensure this runs even if previous steps fail
+        run: |
+          echo "Stopping and removing SQL Server container..."
+          docker stop sql_server_validation
+          docker rm sql_server_validation
+          echo "SQL Server container cleaned up."
