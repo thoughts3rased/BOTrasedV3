@@ -22,12 +22,10 @@ jobs:
         with:
           dotnet-version: '8.0.x' # Or the .NET SDK version your project requires
 
+      - name: Install SQL Server Data Tools (SSDT) Build Components
+        run: dotnet new install Microsoft.Build.Sql.Templates
+
       - name: Build SSDT Project (Basic Validation)
-        # This step compiles the .sqlproj into a .dacpac and catches syntax errors,
-        # unresolved references within the project, etc.
-        # Replace 'YourSolution.sln' with your solution file or 'PathToYourSSDTProject/YourSSDTProject.sqlproj'
-        # If building the whole solution, ensure the SSDT project is included in the .sln
-        # or use a solution filter (.slnf) if you want to exclude other projects.
         run: |
           echo "Attempting to build SSDT project..."
           # Option A: Build the specific SSDT project
