@@ -21,4 +21,4 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build MySolution.build.slnf --no-restore --configuration Release
+      run: dotnet build BOTrasedV3.Build.slnf --no-restore --configuration Release
