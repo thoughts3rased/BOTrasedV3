@@ -1,11 +1,6 @@
 ﻿using BOTrasedV3.Constants;
 using BOTrasedV3.Interfaces;
 using BOTrasedV3.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BOTrasedV3.Services
 {

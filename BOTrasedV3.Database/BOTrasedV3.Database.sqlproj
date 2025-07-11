@@ -66,6 +66,8 @@
     <Build Include="Stored Procedures\GetFakeSecret.sql" />
     <Build Include="Tables\BotStatuses.sql" />
     <Build Include="Stored Procedures\GetRandomStatus.sql" />
+    <Build Include="Stored Procedures\WriteUserJson.sql" />
+    <Build Include="Stored Procedures\AddUserFromId.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="BOTrasedV3.Database.refactorlog" />

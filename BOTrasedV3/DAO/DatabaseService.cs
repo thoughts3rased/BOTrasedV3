@@ -1,6 +1,6 @@
 ﻿using BOTrasedV3.Interfaces;
 using BOTrasedV3.Models;
-using Microsoft.Data.SqlClient; // <--- Changed from MySql.Data.MySqlClient
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Data;
@@ -88,7 +88,6 @@ namespace BOTrasedV3.DAO
                     cmd.Parameters.AddRange(parameters);
                 }
 
-                // Consider making this method async and using ExecuteNonQueryAsync for better performance
                 await cmd.ExecuteNonQueryAsync();
             }
         }

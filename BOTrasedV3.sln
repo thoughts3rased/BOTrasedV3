@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
+# 17
 VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BOTrasedV3", "BOTrasedV3\BOTrasedV3.csproj", "{CC4B41D9-D531-4F1B-9BAD-B27E32045B5A}"
@@ -8,6 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CA7EBCB3-E093-4547-9F7C-D6B903E05A02}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		LICENSE = LICENSE
 	EndProjectSection
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "BOTrasedV3.Database", "BOTrasedV3.Database\BOTrasedV3.Database.sqlproj", "{041008BB-E010-412D-A308-50CFDB4B003F}"
