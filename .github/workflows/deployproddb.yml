@@ -17,7 +17,7 @@ jobs:
         - name: Restore dependencies
           run: dotnet restore
         - name: Build
-          run: dotnet build BOTrasedV3.Database\BOTrasedV3.Database.sqlproj
+          run: dotnet build BOTrasedV3.Database
         - name: Deploy
           uses: azure/sql-action@v2
           with:
