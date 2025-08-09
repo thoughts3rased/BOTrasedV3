@@ -1,6 +1,7 @@
 name: Deploy Production Database Structure
 
 on:
+    workflow_dispatch:
     push: 
         branches: [ "master" ]
     
