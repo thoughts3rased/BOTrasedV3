@@ -17,8 +17,6 @@ jobs:
           run: dotnet restore
         - name: Build
           run: dotnet build BOTrasedV3.Build.slnf --no-restore --configuration Release
-        - name: Deploy Database Structure
-          run: dotnet run --project BOTrasedV3.DatabaseStructure/BOTrasedV3.DatabaseStructure.csproj --configuration Release --no-build -- --deploy-production
         - name: Deploy
           uses: azure/sql-action@v2
           with:
