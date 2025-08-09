@@ -17,10 +17,10 @@ jobs:
         - name: Restore dependencies
           run: dotnet restore
         - name: Build
-          run: dotnet build BOTrasedV3.Build.slnf --no-restore --configuration Release
+          run: dotnet build BOTrasedV3.Database.sqlproj
         - name: Deploy
           uses: azure/sql-action@v2
           with:
             connection-string: ${{ secrets.PROD_DB_CONNECTION_STRING }}
             action: 'publish'
-            path: 'bin/Debug/BOTrasedV3.DatabaseStructure.dacpac'
+            path: 'bin/Debug/BOTrasedV3.Database.dacpac'
