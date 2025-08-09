@@ -8,14 +8,12 @@ BOTrased is a basic bot that aims to host a range of administrative tools, helpf
 
 # Thinking of contributing?
 Some guidelines for contributing:
-- Pull requests are to be targeted to the development branch, not main
+- Pull requests are to be targeted to the development branch, not master
 - If you're creating a command, make sure it fits with the "spirit" of the bot
 - If you're fixing a bug, make sure to raise an issue for it first
 
 # Running BOTrased
 BOTrased is cross platform as it is .NET 8, but prefers to run in Docker.
-
-BOTrased uses the new `.slnx` file. Ensure you have support for it enabled in Visual Studio.
 
 You'll need an `appsettings.json` file - you'll have to create this yourself. Check the `Models/Configuration.cs` file to see what properties you'll need.
 
