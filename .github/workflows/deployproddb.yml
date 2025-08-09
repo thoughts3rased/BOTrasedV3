@@ -1,0 +1,27 @@
+name: Deploy Production Database Structure
+
+on:
+    push: 
+        branches: [ "master" ]
+    
+jobs:
+    deploy:
+        runs-on: self-hosted
+        steps:
+        - uses: actions/checkout@v4
+        - name: Setup .NET
+          uses: actions/setup-dotnet@v4
+          with:
+            dotnet-version: 8.0.x
+        - name: Restore dependencies
+          run: dotnet restore
+        - name: Build
+          run: dotnet build BOTrasedV3.Build.slnf --no-restore --configuration Release
+        - name: Deploy Database Structure
+          run: dotnet run --project BOTrasedV3.DatabaseStructure/BOTrasedV3.DatabaseStructure.csproj --configuration Release --no-build -- --deploy-production
+        - name: Deploy
+          uses: azure/sql-action@v2
+          with:
+            connection-string: ${{ secrets.PROD_DB_CONNECTION_STRING }}
+            action: 'publish'
+            path: 'bin/Debug/BOTrasedV3.DatabaseStructure.dacpac'
